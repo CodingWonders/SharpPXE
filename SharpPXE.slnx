@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SharpPXE.Gui/SharpPXE.Gui.csproj" />
+    <Project Path="src/SharpPXE/SharpPXE.csproj" />
+  </Folder>
+</Solution>

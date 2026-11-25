@@ -1,0 +1,37 @@
+#!ipxe
+# Served by SharpPXE over HTTP. {http} is replaced with this server's URL.
+# Boots WinPE through wimboot (https://ipxe.org/wimboot).
+#
+# Expected layout under the root folder:
+#   wimboot
+#   winpe\boot\bcd             (optional with recent wimboot)
+#   winpe\boot\boot.sdi        (optional with recent wimboot)
+#   winpe\sources\boot.wim
+
+set base {http}
+
+menu SharpPXE
+item winpe   Boot WinPE
+item shell   iPXE shell
+item exit    Exit to firmware
+choose --default winpe --timeout 5000 target || goto exit
+goto ${target}
+
+:winpe
+kernel ${base}/wimboot gui
+initrd -n BCD      ${base}/winpe/boot/bcd          ||
+initrd -n boot.sdi ${base}/winpe/boot/boot.sdi     ||
+initrd -n boot.wim ${base}/winpe/sources/boot.wim
+boot || goto failed
+
+:shell
+shell
+goto exit
+
+:failed
+echo Boot failed. Press a key for the iPXE shell.
+prompt
+shell
+
+:exit
+exit
